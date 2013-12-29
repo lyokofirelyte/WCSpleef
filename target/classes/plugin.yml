@@ -1,0 +1,11 @@
+name: WCSpleef
+main: com.github.lyokofirelyte.WCSpleef.WCSpleef
+author: lyokofirelyte
+prefix: WCSpleef
+depend: [WCAPI]
+version: 1
+
+commands:
+   spleef:
+      description: WC Spleef Command
+      usage: /spleef
