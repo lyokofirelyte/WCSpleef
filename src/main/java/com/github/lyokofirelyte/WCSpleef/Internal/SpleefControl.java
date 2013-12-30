@@ -2,7 +2,9 @@ package com.github.lyokofirelyte.WCSpleef.Internal;
 
 import java.util.List;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -49,19 +51,19 @@ public class SpleefControl implements Listener {
 	
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onMove(PlayerMoveEvent e){
-		
-		if (pl.arenaWalkLocations.contains(e.getPlayer().getLocation()) && !pl.spleef.getGameStarted()){
+
+		if (arenaWalkCheck(e.getFrom()) && !pl.spleef.getGameStarted()){
 			e.getPlayer().setVelocity(new Vector(0, 0, 0));
 		}
 		
-		if (!pl.arenaWalkLocations.contains(e.getFrom()) && pl.arenaWalkLocations.contains(e.getTo())){	
+		if (!arenaWalkCheck(e.getFrom()) && arenaWalkCheck(e.getTo())){	
 			if (pl.spleef.getGameStarted()){
 				e.getPlayer().teleport(e.getFrom());
 				s(e.getPlayer(), "The game is in progress.");
 			}
 		}
 		
-		if (pl.arenaWalkLocations.contains(e.getFrom()) && !pl.arenaWalkLocations.contains(e.getTo())){	
+		if (arenaWalkCheck(e.getFrom()) && !arenaWalkCheck(e.getTo())){	
 			if (pl.spleef.getGameStarted()){
 				pl.getServer().getPluginManager().callEvent(new PlayerFallEvent(e.getPlayer()));
 			}
@@ -73,18 +75,24 @@ public class SpleefControl implements Listener {
 	public void onLog(PlayerQuitEvent e){
 		
 		List<String> players = pl.spleef.getPlayers();
+		List<String> remPlayers = pl.spleef.getRemainingPlayers();
 		
 		if (players.contains(e.getPlayer().getName())){
 			players.remove(e.getPlayer().getName());
 			pl.spleef.setPlayers(players);
 			pl.manager.gameMsg(e.getPlayer().getDisplayName() + " was resigned from the game due to logging out. They can re-join on the next round.");
 		}
+		
+		if (remPlayers.contains(e.getPlayer().getName())){
+			remPlayers.remove(e.getPlayer().getName());
+			pl.spleef.setRemainingPlayers(remPlayers);
+		}
 	}
 	
 	@EventHandler
 	public void onCommand(PlayerCommandPreprocessEvent e){
 		
-		if (pl.spleef.getPlayers().contains(e.getPlayer().getName()) && pl.arenaLocations.contains(e.getPlayer().getLocation()) && !e.getMessage().toLowerCase().startsWith("/spleef")){
+		if (pl.spleef.getPlayers().contains(e.getPlayer().getName()) && arenaWalkCheck(e.getPlayer().getLocation()) && !e.getMessage().toLowerCase().startsWith("/spleef")){
 			s(e.getPlayer(), "Only /spleef is allowed during a game! Wait until you get out or win to do that.");
 			e.setCancelled(true);
 		}
@@ -109,7 +117,7 @@ public class SpleefControl implements Listener {
 	@EventHandler
 	public void onGravity(EntityChangeBlockEvent e){
 		
-		if (pl.arenaLocations.contains(e.getBlock().getLocation())){
+		if (pl.arenaLocations.contains(e.getBlock().getLocation()) && !(e.getEntity() instanceof Player)){
 			if (e.getBlock().getType().equals(Material.SAND) || e.getBlock().getType().equals(Material.GRAVEL)){ 
 				e.setCancelled(true);
 			}
@@ -130,5 +138,17 @@ public class SpleefControl implements Listener {
 		if (pl.arenaLocations.contains(e.getLocation())){
 			e.setCancelled(true);
 		}
+	}
+	
+	public Boolean arenaWalkCheck(Location l){
+		
+		List<Location> spleef = pl.arenaWalkLocations;
+		
+		for (Location a : spleef){
+			if (Math.round(l.getX()) == Math.round(a.getX()) && Math.round(l.getY()) == Math.round(a.getY()) && Math.round(l.getZ()) == Math.round(a.getZ()) && l.getWorld() == a.getWorld()){
+				return true;
+			}
+		}
+		return false;
 	}
 }

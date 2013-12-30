@@ -67,5 +67,9 @@ public class PlayerFallEvent extends WCEvent implements Cancellable {
 				}
 			}
 		}
+		
+		if (p.equals("meh")){
+			spleefer = player;
+		}
 	}
 }

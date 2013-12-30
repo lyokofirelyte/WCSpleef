@@ -31,8 +31,9 @@ public class GamePlay implements Listener {
 				sp.setScore(0);
 				sp.setDisq(false);
 			}
-			pl.spleef.setRemainingPlayers(pl.spleef.getPlayers());
 		}
+		
+		pl.spleef.setRemainingPlayers(new ArrayList<String>(pl.spleef.getPlayers()));
 
 		Random rand = new Random();
 
@@ -40,10 +41,20 @@ public class GamePlay implements Listener {
 			Location l = pl.arenaLocations.get(rand.nextInt(pl.arenaLocations.size()-1));
 			Bukkit.getPlayer(p).teleport(new Location(l.getWorld(), l.getX(), l.getY()+1, l.getZ()));
 			pl.manager.spleefKit(p);
+			Location pp = Bukkit.getPlayer(p).getLocation();
+		    List<Location> poles = pl.spleef.getPoles();
+			poles.add(new Location(pp.getWorld(), pp.getX()+1, pp.getY(), pp.getZ()));
+			poles.add(new Location(pp.getWorld(), pp.getX(), pp.getY(), pp.getZ()+1));
+			poles.add(new Location(pp.getWorld(), pp.getX()-1, pp.getY(), pp.getZ()));
+			poles.add(new Location(pp.getWorld(), pp.getX(), pp.getY(), pp.getZ()-1));
+			pl.spleef.setPoles(poles);
+			for (Location ll : poles){
+				ll.getBlock().setType(Material.STAINED_GLASS);
+			}
 		}
 		
-		pl.spleef.setGameStarted(true);
 		pl.manager.gameMsg(e.getPlayer().getDisplayName() + " has started round &6" + e.getRound() + "&d!");
+		pl.spleef.setCounter(5);
 		pl.manager.spleefCount();	
 	}
 	
@@ -100,7 +111,7 @@ public class GamePlay implements Listener {
 		sp.setScore(sp.getScore() + 1);
 		pl.spleefPlayers.put(winner.getName(), sp);
 		WCUtils.effects(winner);
-		pl.manager.updateArena(Material.WOOL);
+		pl.manager.updateArena(Material.GLASS);
 		pl.spleef.setGameStarted(false);
 		pl.manager.gameMsg("Round winner: " + winner.getDisplayName() + "&d. Score: &6" + sp.getScore());
 		pl.manager.gameMsg("&6Spleef is ready for another round.");

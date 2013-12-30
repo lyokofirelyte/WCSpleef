@@ -86,6 +86,7 @@ public class GuiSpleef extends WCGui {
 					main.arenaLocations = WCUtils.circle(p.getLocation(), 20, 1, false, false, 0);
 					main.arenaWalkLocations = WCUtils.circle(p.getLocation(), 20, 2, false, false, 1);
 					main.manager.updateArena(Material.GLASS);
+					p.closeInventory();
 				}
 				
 				break;
@@ -106,6 +107,7 @@ public class GuiSpleef extends WCGui {
 					} else {
 						main.manager.gameMsg("The spleef game has started! Please wait for the countdown...");
 				  		main.getServer().getPluginManager().callEvent(new GameStartEvent(p, 1));
+				  		main.spleef.setRound(1);
 					}
 				} 
 				
@@ -117,7 +119,9 @@ public class GuiSpleef extends WCGui {
 					main.spleef.setRound(0);
 					main.spleef.setPlayers(new ArrayList<String>());
 					main.spleef.setRemainingPlayers(new ArrayList<String>());
-					main.manager.updateArena(Material.WOOL);
+					main.manager.updateArena(Material.AIR);
+					main.spleef.setGameStarted(false);
+					p.closeInventory();
 				} 
 				
 				break;
@@ -127,6 +131,7 @@ public class GuiSpleef extends WCGui {
 				if (permCheck(p, "wa.staff")){
 					if (main.spleef.getRound() > 0){
 				  		main.getServer().getPluginManager().callEvent(new GameStartEvent(p, main.spleef.getRound()+1));
+				  		main.spleef.setRound(main.spleef.getRound()+1);
 					} else {
 						main.api.wcm.displayGui(p, new GuiMessage(main, "&c&lThe game isn't started yet!", 3, p, this));
 					}

@@ -76,7 +76,7 @@ public class Manager {
 			pl.spleef.setExitLocation(new Location(Bukkit.getWorld(d.get(0)), Double.parseDouble(d.get(1)), Double.parseDouble(d.get(2)), Double.parseDouble(d.get(3))));
 			pl.arenaLocations = WCUtils.circle(pl.spleef.getArena(), 20, 1, false, false, 0);
 			Location l = pl.spleef.getArena();
-			pl.arenaWalkLocations = WCUtils.circle(new Location(l.getWorld(), l.getX(), l.getY()+1, l.getZ()), 20, 2, false, false, 0);
+			pl.arenaWalkLocations = WCUtils.circle(new Location(l.getWorld(), l.getX(), l.getY()+1, l.getZ()), 20, 3, false, false, 0);
 		}
 	}
 	
@@ -91,6 +91,7 @@ public class Manager {
     }
     
     public void updateArena(Material m){
+    	
     	for (Location l : pl.arenaLocations){
     		l.getBlock().setType(m);
 			for (Player q : Bukkit.getOnlinePlayers()){
@@ -110,27 +111,35 @@ public class Manager {
 		}
     }
     
+    public void blah(String g){
+    	
+    	Bukkit.getPlayer("Hugh_Jasses").sendMessage(g);
+    	
+    }
+    
     public void spleefCount(){
     	
     	long delay = 0L;
-    	y = 3;
     	
-    	for (int x = 3; x > 0; x--){
+    	for (int x = 6; x > 0; x--){
     		  Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable(){
     		  public void run() { 
-    				  
-    			  gameMsg("&6Spleef in " + y);
+
+    			 gameMsg("&6Spleef in " + pl.spleef.getCounter());
+    			 pl.spleef.setCounter(pl.spleef.getCounter() -1);
     			  
     		  } }, delay);
     		  
     		  delay = delay + 20L;
-    		  y = y - 1;
     	}
     	
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable(){
 		public void run() { 
 			  
 			pl.spleef.setGameStarted(true);
+			for (Location l : pl.spleef.getPoles()){
+				l.getBlock().setType(Material.AIR);
+			}
 			  
 		} }, delay);
     }
@@ -140,7 +149,7 @@ public class Manager {
     	List<Material> items = Arrays.asList(Material.DIAMOND_AXE, Material.DIAMOND_SPADE, Material.DIAMOND_PICKAXE, Material.DIAMOND_SWORD, Material.SHEARS);
     
     	for (Material m : items){
-    		ItemStack i = InventoryManager.createItem(WCUtils.AS("&aSpleef Item"), new String[] { "It's Awesome!" }, Enchantment.DIG_SPEED, 2, m, 0, 1);
+    		ItemStack i = InventoryManager.createItem(WCUtils.AS("&aSpleef Item"), new String[] { "It's Awesome!" }, Enchantment.DIG_SPEED, 2, m, 1, 1);
     		Bukkit.getPlayer(p).getInventory().addItem(i);
     	}
     }

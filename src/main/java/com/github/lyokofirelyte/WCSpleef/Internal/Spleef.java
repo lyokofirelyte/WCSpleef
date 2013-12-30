@@ -19,8 +19,10 @@ public class Spleef {
 	Location exit;
 	Boolean gameStarted = false;
 	int round = 0;
+	int counter = 5;
 	List<String> players = new ArrayList<>();
 	List<String> remainingPlayers = new ArrayList<>();
+	List<Location> poles = new ArrayList<>();
 	
 	public Location getArena(){
 		return arena;
@@ -38,12 +40,20 @@ public class Spleef {
 		return round;
 	}
 	
+	public int getCounter(){
+		return counter;
+	}
+	
 	public List<String> getPlayers(){
 		return players;
 	}
 	
 	public List<String> getRemainingPlayers(){
 		return remainingPlayers;
+	}
+	
+	public List<Location> getPoles(){
+		return poles;
 	}
 	
 	
@@ -63,12 +73,20 @@ public class Spleef {
 		round = a;
 	}
 	
+	public void setCounter(int a){
+		counter = a;
+	}
+	
 	public void setPlayers(List<String> a){
 		players = a;
 	}
 	
 	public void setRemainingPlayers(List<String> a){
 		remainingPlayers = a;
+	}
+	
+	public void setPoles(List<Location> a){
+		poles = a;
 	}
 	
 	public void remRemainingPlayer(String a){
