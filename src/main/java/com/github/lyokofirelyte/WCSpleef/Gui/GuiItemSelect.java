@@ -35,7 +35,7 @@ public class GuiItemSelect extends WCGui {
 	
 	@Override
 	public void actionPerformed(Player p){
-	
+			
 		if (item != null){
 			main.manager.updateArena(item.getType());
 			p.closeInventory();

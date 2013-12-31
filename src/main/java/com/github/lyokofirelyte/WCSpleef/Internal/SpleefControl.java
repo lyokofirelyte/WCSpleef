@@ -52,7 +52,7 @@ public class SpleefControl implements Listener {
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onMove(PlayerMoveEvent e){
 
-		if (arenaWalkCheck(e.getFrom()) && !pl.spleef.getGameStarted()){
+		if (pl.spleef.getPlayers().contains(e.getPlayer().getName()) && arenaWalkCheck(e.getFrom()) && !pl.spleef.getGameStarted()){
 			e.getPlayer().setVelocity(new Vector(0, 0, 0));
 		}
 		

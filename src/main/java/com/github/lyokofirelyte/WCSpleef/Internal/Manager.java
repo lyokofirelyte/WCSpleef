@@ -90,17 +90,12 @@ public class Manager {
     	((CraftPlayer) player).getHandle().chunkCoordIntPairQueue.add(new ChunkCoordIntPair(cx, cz));
     }
     
-    public void updateArena(Material m){
+    @SuppressWarnings("deprecation")
+	public void updateArena(Material m){
     	
-    	for (Location l : pl.arenaLocations){
-    		l.getBlock().setType(m);
-			for (Player q : Bukkit.getOnlinePlayers()){
-				if (q.getWorld() == l.getWorld()){
-					pl.manager.forceBlockLight(q, (int)l.getX(), (int)l.getY(), (int)l.getZ(), 15);
-					pl.manager.queueChunk(q, l.getChunk().getX(), l.getChunk().getZ());
-				}
-			}
-    	}
+        for (Location l : pl.arenaLocations){
+        	l.getBlock().setTypeId(m.getId(), false);
+        }
     }
     
     public void gameMsg(String s){
@@ -109,12 +104,6 @@ public class Manager {
 				s(q, s);
 			}
 		}
-    }
-    
-    public void blah(String g){
-    	
-    	Bukkit.getPlayer("Hugh_Jasses").sendMessage(g);
-    	
     }
     
     public void spleefCount(){
@@ -137,8 +126,10 @@ public class Manager {
 		public void run() { 
 			  
 			pl.spleef.setGameStarted(true);
-			for (Location l : pl.spleef.getPoles()){
-				l.getBlock().setType(Material.AIR);
+			for (Location ll : pl.spleef.getPoles()){
+				if (ll.getBlock().getType() == Material.STAINED_GLASS){
+					ll.getBlock().setType(Material.AIR);
+				}
 			}
 			  
 		} }, delay);

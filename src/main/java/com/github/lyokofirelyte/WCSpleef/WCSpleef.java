@@ -49,7 +49,8 @@ public class WCSpleef extends JavaPlugin implements CommandExecutor {
 	public void onDisable(){	
 		manager.save();
 	}
-	
+
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		  
 		if (label.equalsIgnoreCase("spleef")){

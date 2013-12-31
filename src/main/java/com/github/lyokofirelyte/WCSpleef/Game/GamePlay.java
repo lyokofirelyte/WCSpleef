@@ -49,7 +49,9 @@ public class GamePlay implements Listener {
 			poles.add(new Location(pp.getWorld(), pp.getX(), pp.getY(), pp.getZ()-1));
 			pl.spleef.setPoles(poles);
 			for (Location ll : poles){
-				ll.getBlock().setType(Material.STAINED_GLASS);
+				if (ll.getBlock().getType() == Material.AIR){
+					ll.getBlock().setType(Material.STAINED_GLASS);
+				}
 			}
 		}
 		
@@ -90,7 +92,7 @@ public class GamePlay implements Listener {
 		for (int i : scores){
 			for (String s : pl.spleefPlayers.keySet()){
 				if (pl.spleefPlayers.get(s).getScore() == i){
-					sb.append(Bukkit.getPlayer(s).getDisplayName() + "&f: " + i + "  ");
+					sb.append(s + "&f: " + i + "  ");
 				}
 			}
 		}

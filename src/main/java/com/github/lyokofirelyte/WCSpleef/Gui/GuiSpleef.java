@@ -5,6 +5,8 @@ import static com.github.lyokofirelyte.WCAPI.Manager.InventoryManager.createItem
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import com.github.lyokofirelyte.WCAPI.WCGui;
@@ -37,7 +39,7 @@ public class GuiSpleef extends WCGui {
 		addButton(5, createItem("&aReset", new String[] { "&3Force-Reset a game!" }, Material.STAINED_GLASS, 1, 6));
 		addButton(6, createItem("&aNext Round", new String[] { "&3Start the next round!" }, Material.STAINED_GLASS, 1, 7));
 		addButton(7, createItem("&aExit Location", new String[] { "&3Set exit location" }, Material.STAINED_GLASS, 1, 8));
-		addButton(8, createItem("&cClose", new String[] { "&cClose Menu" }, Material.STAINED_GLASS, 1, 9));
+		addButton(8, createItem("&cLight", new String[] { "&cLight-up arena", "&4WARNING: Can lagg" }, Material.STAINED_GLASS, 1, 10));
 	}
 	
 	@Override
@@ -147,10 +149,21 @@ public class GuiSpleef extends WCGui {
 				}
 				
 				break;
-			
+				
 			case 8:
 				
-				p.closeInventory();	
+				if (permCheck(p, "wa.staff")){
+					for (Location l : main.arenaLocations){
+						for (Player pp : Bukkit.getOnlinePlayers()){
+							if (pp.getWorld() == l.getWorld()){
+								main.manager.forceBlockLight(pp, (int)l.getX(), (int)l.getY(), (int)l.getZ(), 15);
+								main.manager.queueChunk(pp, l.getChunk().getX(), l.getChunk().getZ());
+							}
+						}
+					}
+					s(p, "Arena updated.");
+				}
+				
 				break;
 		}
 	}
