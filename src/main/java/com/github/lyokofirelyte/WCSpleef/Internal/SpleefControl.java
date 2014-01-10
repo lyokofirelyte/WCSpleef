@@ -21,8 +21,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.util.Vector;
 
 import static com.github.lyokofirelyte.WCAPI.WCUtils.s;
+
+import com.github.lyokofirelyte.WCAPI.Events.SpleefPlayerFallEvent;
 import com.github.lyokofirelyte.WCSpleef.WCSpleef;
-import com.github.lyokofirelyte.WCSpleef.Game.PlayerFallEvent;
 
 public class SpleefControl implements Listener {
 	
@@ -65,7 +66,7 @@ public class SpleefControl implements Listener {
 		
 		if (arenaWalkCheck(e.getFrom()) && !arenaWalkCheck(e.getTo())){	
 			if (pl.spleef.getGameStarted()){
-				pl.getServer().getPluginManager().callEvent(new PlayerFallEvent(e.getPlayer()));
+				pl.getServer().getPluginManager().callEvent(new SpleefPlayerFallEvent(e.getPlayer()));
 			}
 			e.getPlayer().getInventory().clear();
 		}

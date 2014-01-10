@@ -11,8 +11,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import com.github.lyokofirelyte.WCAPI.WCGui;
 import com.github.lyokofirelyte.WCAPI.WCUtils;
+import com.github.lyokofirelyte.WCAPI.Events.SpleefGameStartEvent;
 import com.github.lyokofirelyte.WCSpleef.WCSpleef;
-import com.github.lyokofirelyte.WCSpleef.Game.GameStartEvent;
 import com.github.lyokofirelyte.WCSpleef.Internal.SpleefPlayer;
 
 import static com.github.lyokofirelyte.WCAPI.WCUtils.s;
@@ -74,6 +74,7 @@ public class GuiSpleef extends WCGui {
 				} else {
 					main.manager.gameMsg(p.getDisplayName() + " &dhas left the game!");
 					players.remove(p.getName());
+					main.spleef.remRemainingPlayer(p.getName());
 					main.spleef.setPlayers(players);
 				}
 				
@@ -108,7 +109,7 @@ public class GuiSpleef extends WCGui {
 						s(p, "The game is already started!");
 					} else {
 						main.manager.gameMsg("The spleef game has started! Please wait for the countdown...");
-				  		main.getServer().getPluginManager().callEvent(new GameStartEvent(p, 1));
+				  		main.getServer().getPluginManager().callEvent(new SpleefGameStartEvent(p, 1));
 				  		main.spleef.setRound(1);
 					}
 				} 
@@ -132,7 +133,7 @@ public class GuiSpleef extends WCGui {
 				
 				if (permCheck(p, "wa.staff")){
 					if (main.spleef.getRound() > 0){
-				  		main.getServer().getPluginManager().callEvent(new GameStartEvent(p, main.spleef.getRound()+1));
+				  		main.getServer().getPluginManager().callEvent(new SpleefGameStartEvent(p, main.spleef.getRound()+1));
 				  		main.spleef.setRound(main.spleef.getRound()+1);
 					} else {
 						main.api.wcm.displayGui(p, new GuiMessage(main, "&c&lThe game isn't started yet!", 3, p, this));

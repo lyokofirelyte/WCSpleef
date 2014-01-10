@@ -21,11 +21,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>WCAPI</groupId>
+      <groupId>com.github.lyokofirelyte</groupId>
       <artifactId>WCAPI</artifactId>
-      <scope>system</scope>
       <version>5</version>
-      <systemPath>${project.basedir}\src\lib\WCAPI.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>org.bukkit</groupId>
@@ -42,6 +40,10 @@
     <repository>
       <id>bukkit-repo</id>
       <url>http://repo.bukkit.org/content/repositories/snapshots/</url>
+    </repository>
+    <repository>
+      <id>WCAPI</id>
+      <url>https://github.com/lyokofirelyte/WCAPI/tree/mvn-repo/</url>
     </repository>
   </repositories>
   <build>

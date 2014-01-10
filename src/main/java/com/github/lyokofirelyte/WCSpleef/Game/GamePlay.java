@@ -12,7 +12,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import com.github.lyokofirelyte.WCAPI.WCUtils;
+import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
+import com.github.lyokofirelyte.WCAPI.Events.SpleefGameStartEvent;
+import com.github.lyokofirelyte.WCAPI.Events.SpleefPlayerFallEvent;
 import com.github.lyokofirelyte.WCSpleef.WCSpleef;
+import com.github.lyokofirelyte.WCSpleef.Gui.GuiSpleef;
 import com.github.lyokofirelyte.WCSpleef.Internal.SpleefPlayer;
 
 public class GamePlay implements Listener {
@@ -22,9 +26,14 @@ public class GamePlay implements Listener {
 	public GamePlay(WCSpleef i) {
 		pl = i;
 	}
+
+	@WCCommand(aliases = {"spleef", "wcspleef"}, help = "/spleef", desc = "WC Spleef Command")
+	public void cmd(Player sender, String[] args) {
+			pl.api.wcm.displayGui(sender, new GuiSpleef(pl));
+	}
 	
 	@EventHandler
-	public void onRound(GameStartEvent e){
+	public void onRound(SpleefGameStartEvent e){
 		
 		if (e.getRound() == 1){
 			for (SpleefPlayer sp : pl.spleefPlayers.values()){
@@ -42,7 +51,7 @@ public class GamePlay implements Listener {
 			Bukkit.getPlayer(p).teleport(new Location(l.getWorld(), l.getX(), l.getY()+1, l.getZ()));
 			pl.manager.spleefKit(p);
 			Location pp = Bukkit.getPlayer(p).getLocation();
-		    List<Location> poles = pl.spleef.getPoles();
+		    List<Location> poles = new ArrayList<Location>();
 			poles.add(new Location(pp.getWorld(), pp.getX()+1, pp.getY(), pp.getZ()));
 			poles.add(new Location(pp.getWorld(), pp.getX(), pp.getY(), pp.getZ()+1));
 			poles.add(new Location(pp.getWorld(), pp.getX()-1, pp.getY(), pp.getZ()));
@@ -61,7 +70,7 @@ public class GamePlay implements Listener {
 	}
 	
 	@EventHandler
-	public void onFall(PlayerFallEvent e){
+	public void onFall(SpleefPlayerFallEvent e){
 		
 		pl.manager.gameMsg(e.getPlayer().getDisplayName() + " &6was &oprobably &6spleefed by " + e.getSpleefer().getDisplayName() + "&6!");
 		pl.spleef.remRemainingPlayer(e.getPlayer().getName());
