@@ -45,25 +45,26 @@ public class GamePlay implements Listener {
 		pl.spleef.setRemainingPlayers(new ArrayList<String>(pl.spleef.getPlayers()));
 
 		Random rand = new Random();
+	    List<Location> poles = new ArrayList<Location>();
 
 		for (String p : pl.spleef.getPlayers()){
 			Location l = pl.arenaLocations.get(rand.nextInt(pl.arenaLocations.size()-1));
 			Bukkit.getPlayer(p).teleport(new Location(l.getWorld(), l.getX(), l.getY()+1, l.getZ()));
 			pl.manager.spleefKit(p);
 			Location pp = Bukkit.getPlayer(p).getLocation();
-		    List<Location> poles = new ArrayList<Location>();
 			poles.add(new Location(pp.getWorld(), pp.getX()+1, pp.getY(), pp.getZ()));
 			poles.add(new Location(pp.getWorld(), pp.getX(), pp.getY(), pp.getZ()+1));
 			poles.add(new Location(pp.getWorld(), pp.getX()-1, pp.getY(), pp.getZ()));
 			poles.add(new Location(pp.getWorld(), pp.getX(), pp.getY(), pp.getZ()-1));
-			pl.spleef.setPoles(poles);
-			for (Location ll : poles){
-				if (ll.getBlock().getType() == Material.AIR){
-					ll.getBlock().setType(Material.STAINED_GLASS);
-				}
+		}
+		
+		for (Location ll : poles){
+			if (ll.getBlock().getType() == Material.AIR){
+				ll.getBlock().setType(Material.STAINED_GLASS);
 			}
 		}
 		
+		pl.spleef.setPoles(poles);
 		pl.manager.gameMsg(e.getPlayer().getDisplayName() + " has started round &6" + e.getRound() + "&d!");
 		pl.spleef.setCounter(5);
 		pl.manager.spleefCount();	

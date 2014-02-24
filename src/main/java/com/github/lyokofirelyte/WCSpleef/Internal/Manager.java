@@ -127,7 +127,7 @@ public class Manager {
 			  
 			pl.spleef.setGameStarted(true);
 			for (Location ll : pl.spleef.getPoles()){
-				if (ll.getBlock().getType() == Material.STAINED_GLASS){
+				if (ll.getBlock().getType().equals(Material.STAINED_GLASS)){
 					ll.getBlock().setType(Material.AIR);
 				}
 			}
